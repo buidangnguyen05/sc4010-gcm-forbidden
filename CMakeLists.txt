@@ -31,6 +31,12 @@ target_link_libraries(forbidden PRIVATE gcmcore)
 add_executable(poly_tests poly_tests.cpp)
 target_link_libraries(poly_tests PRIVATE gcmcore)
 
+# GATE #4 — attack unit tests (forbidden poly, H/S recovery, forgery).
+#           `./attack_tests [name-filter]`
+add_executable(attack_tests attack_tests.cpp)
+target_link_libraries(attack_tests PRIVATE gcmcore)
+
 enable_testing()
 add_test(NAME gate1 COMMAND tests)
 add_test(NAME gate3 COMMAND poly_tests)
+add_test(NAME gate4 COMMAND attack_tests)

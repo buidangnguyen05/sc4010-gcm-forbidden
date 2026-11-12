@@ -36,5 +36,3 @@ struct Forgery {
 
 Forgery forge(gf H, gf S, const Bytes &keystream,
               const Bytes &chosen_aad, const Bytes &chosen_plaintext);
-
-// TODO(you): implement in attack.cpp once gf128poly is green.

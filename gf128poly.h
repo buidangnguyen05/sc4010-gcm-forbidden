@@ -28,7 +28,3 @@ poly poly_Ypow_2_128_mod(const poly &f); // Y^(2^128) mod f (128 squarings of Y)
 // --- root finding in GF(2^128) ---
 poly distinct_roots_factor(const poly &f); // gcd(f, Y^(2^128) - Y): product of (Y - root)
 std::vector<gf> find_roots(const poly &f); // all roots of f in the field
-
-// TODO(you): implement all of the above in gf128poly.cpp.
-// Suggested order + the gate-#3 unit test: build (Y-a)(Y-b)(Y-c) with poly_mul,
-// then assert find_roots returns exactly {a,b,c}.
