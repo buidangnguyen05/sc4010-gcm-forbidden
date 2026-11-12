@@ -25,10 +25,10 @@
 
 Victim::Victim(const uint8_t key[16]) { std::memcpy(key_, key, 16); }
 
-// THE BUG: wind the nonce counter back to 0, so the next send() repeats nonce 0.
-// A correct device would reload a persisted counter here, or reseed a per-boot
-// nonce salt — see "THE FIX" at the top of this file.
-void Victim::reboot() { counter_ = 0; }
+// THE BUG: wind the nonce counter back to its fixed boot value, so the next
+// send() repeats that nonce.  A correct device would reload a persisted counter
+// here, or reseed a per-boot nonce salt — see "THE FIX" at the top of this file.
+void Victim::reboot() { counter_ = BOOT_NONCE; }
 
 // Turn the 64-bit counter into a 96-bit IV: 4 zero bytes || counter (big-endian).
 // GCM here is 96-bit-IV only, so the IV must be exactly 12 bytes.

@@ -15,18 +15,23 @@ struct Captured {
     Bytes tag;
 };
 
+// The nonce counter the firmware (re)boots to. A nonzero *fixed* value is still
+// the bug: every boot reuses the same nonce. (It's a joke value — any constant,
+// including 0, triggers the reuse.)
+inline constexpr uint64_t BOOT_NONCE = 0xBADC0FFEE0DDF00DULL; // "bad coffee, odd food"
+
 class Victim {
 public:
     explicit Victim(const uint8_t key[16]);
 
-    void reboot(); // resets the nonce counter to 0 (the bug)
+    void reboot(); // winds the nonce counter back to its boot value (the bug)
     Captured send(const Bytes &aad, const Bytes &plaintext);
 
     bool receive(const Captured &c, const Bytes &aad, Bytes &plaintext_out);
 
 private:
     uint8_t key_[16];
-    uint64_t counter_ = 0; // becomes the IV; reset by reboot()
+    uint64_t counter_ = BOOT_NONCE; // becomes the IV; reset by reboot()
     void make_iv(uint8_t iv[12]);
 };
 

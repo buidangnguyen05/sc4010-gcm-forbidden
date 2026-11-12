@@ -44,6 +44,10 @@ gf recover_mask_S(gf H, const Msg &m1) {
 }
 
 Forgery forge(gf H, gf S, const Bytes &ks, const Bytes &aad, const Bytes &pt) {
+    // CTR keystream only covers as many bytes as the known-plaintext capture it
+    // was recovered from — you can't encrypt past it under this nonce.
+    if (pt.size() > ks.size())
+        throw std::logic_error("forge: plaintext longer than recovered keystream");
     Bytes ct(pt.size());
     for (size_t i = 0; i < pt.size(); ++i) ct[i] = pt[i] ^ ks[i];
     gf T = ghash(H, aad.data(), aad.size(), ct.data(), ct.size()) ^ S;

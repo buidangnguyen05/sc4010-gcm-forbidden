@@ -23,7 +23,7 @@ target_link_libraries(gcmcore PUBLIC OpenSSL::Crypto)
 add_executable(tests tests.cpp)
 target_link_libraries(tests PRIVATE gcmcore)
 
-# Live demo driver (fill in main.cpp as the attack comes together).
+# Live demo driver: flaky client, IV-blind all-pairs break, active injection.
 add_executable(forbidden main.cpp)
 target_link_libraries(forbidden PRIVATE gcmcore)
 
