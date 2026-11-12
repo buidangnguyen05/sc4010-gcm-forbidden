@@ -3,20 +3,20 @@ project(gcm_forbidden CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-if(NOT CMAKE_BUILD_TYPE)
-  set(CMAKE_BUILD_TYPE Release)
-endif()
+if (NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE Release)
+endif ()
 add_compile_options(-O2 -Wall -Wextra)
 
 find_package(OpenSSL REQUIRED)
 
 # Core library: field + GCM are fully implemented; poly/attack/victim are stubs.
 add_library(gcmcore
-  gf128.cpp
-  gcm.cpp
-  gf128poly.cpp
-  attack.cpp
-  victim.cpp)
+        gf128.cpp
+        gcm.cpp
+        gf128poly.cpp
+        attack.cpp
+        victim.cpp)
 target_link_libraries(gcmcore PUBLIC OpenSSL::Crypto)
 
 # GATE #1 — the test harness. `ctest` or run ./tests directly.

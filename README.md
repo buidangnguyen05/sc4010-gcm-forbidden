@@ -7,8 +7,7 @@ root is `H`. Recover `H`, recover the mask `S`, forge any message under that non
 
 ## Build & run
 
-Needs a C++17 compiler (`unsigned __int128` → GCC/Clang) and OpenSSL headers
-(`libssl-dev`).
+Needs a C++17 compiler (`unsigned __int128` → GCC/Clang) and OpenSSL headers (`libssl-dev`).
 
 ```bash
 cmake -B build -DCMAKE_BUILD_TYPE=Release
@@ -33,6 +32,7 @@ f(Y) = (T₁ ⊕ T₂)  ⊕  Σᵢ (Xᵢ ⊕ X′ᵢ)·Y^(m−i+1)        with  
 ```
 
 Root-find `f` over GF(2^128):
+
 1. make `f` monic;
 2. `g = gcd(f, Y^(2^128) − Y)` keeps only in-field roots. Compute `Y^(2^128) mod f`
    by squaring `Y` modulo `f` **128 times**, then `gcd(f, that ⊕ Y)`;
@@ -49,14 +49,14 @@ forge `T* = GHASH_H(A*,C*) ⊕ S`.
 Everything is a stub (`throw std::logic_error("TODO: ...")`); headers carry the
 signatures. Fill in the `.cpp` bodies — the whole implementation is yours.
 
-| file | what to implement |
-|---|---|
-| `gf128.{h,cpp}`     | GF(2^128) field arithmetic |
-| `gcm.{h,cpp}`       | GHASH + AES-128-GCM (AES block via OpenSSL ECB) |
+| file                | what to implement                                               |
+|---------------------|-----------------------------------------------------------------|
+| `gf128.{h,cpp}`     | GF(2^128) field arithmetic                                      |
+| `gcm.{h,cpp}`       | GHASH + AES-128-GCM (AES block via OpenSSL ECB)                 |
 | `gf128poly.{h,cpp}` | polynomials over GF(2^128) + root finding — **the attack core** |
-| `attack.{h,cpp}`    | build `f`, recover `H`/`S`, forge |
-| `victim.{h,cpp}`    | broken GCM user: nonce counter resets on `reboot()` |
-| `main.cpp`          | live demo driver |
+| `attack.{h,cpp}`    | build `f`, recover `H`/`S`, forge                               |
+| `victim.{h,cpp}`    | broken GCM user: nonce counter resets on `reboot()`             |
+| `main.cpp`          | live demo driver                                                |
 | `tests.cpp`         | Gate #1 harness (McGrew–Viega / NIST vectors) — calls your code |
 
 ## Build order (don't skip a gate)
@@ -72,12 +72,14 @@ signatures. Fill in the `.cpp` bodies — the whole implementation is yours.
    saw and show `Victim::receive` returns `true`.
 
 ## Pitfalls
+
 - **Bit reflection** in `gf_mul` — handled in `gf_load_be` (big-endian, `R = 0xE1<<120`). Don't "fix" it.
 - **Length block** is part of the polynomial; it **cancels** when both messages share lengths (lowers the degree).
 - Multiple candidate roots are expected — you need a second pair to disambiguate.
 - Stick to **96-bit IVs** (`J₀ = IV‖0³¹‖1`); other lengths make `J₀` itself a GHASH.
 
 ## References
+
 - A. Joux, *Authentication Failures in NIST Version of GCM* (2006).
 - Böck, Zauner, Devlin et al., *Nonce-Disrespecting Adversaries* (2016) — real TLS servers.
 - Cryptopals Set 8, Challenge 63 — closest existing exercise.

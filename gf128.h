@@ -5,20 +5,24 @@
 #include <cstddef>
 #include <string>
 
-using gf = unsigned __int128;
+using gf = __uint128_t;
 
-inline constexpr gf GF_R   = 0;   // TODO: reduction constant
-inline constexpr gf GF_ONE = 0;   // TODO: multiplicative identity in this representation
+inline constexpr gf GF_R = (static_cast<gf>(0xE1)) << 120;
+inline constexpr gf GF_ONE = (static_cast<gf>(1)) << 127;
 
 // byte <-> field
-gf   gf_load_be(const uint8_t b[16]);
+gf gf_load_be(const uint8_t b[16]);
+
 void gf_store_be(gf u, uint8_t b[16]);
-gf   gf_load_partial_be(const uint8_t* p, size_t n);   // n < 16, zero-padded
+
+gf gf_load_partial_be(const uint8_t *p, size_t n); // n < 16, zero-padded
 
 // field ops
-inline gf gf_add(gf a, gf b) { return a ^ b; }         // addition is XOR (given)
+inline gf gf_add(gf a, gf b) { return a ^ b; } // addition is XOR (given)
 gf gf_mul(gf a, gf b);
-gf gf_sqr(gf a);
-gf gf_inv(gf a);                                        // a^(2^128 - 2)
 
-std::string gf_to_hex(gf u);                            // 32 hex chars, MSB first
+gf gf_sqr(gf a);
+
+gf gf_inv(gf a); // a^(2^128 - 2)
+
+std::string gf_to_hex(gf u); // 32 hex chars, MSB first

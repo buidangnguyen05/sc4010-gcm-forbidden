@@ -9,18 +9,25 @@
 
 using Bytes = std::vector<uint8_t>;
 
-struct Captured { Bytes iv; Bytes ct; Bytes tag; };
+struct Captured {
+    Bytes iv;
+    Bytes ct;
+    Bytes tag;
+};
 
 class Victim {
 public:
     explicit Victim(const uint8_t key[16]);
-    void   reboot();                         // resets the nonce counter to 0 (the bug)
-    Captured send(const Bytes& aad, const Bytes& plaintext);
-    bool    receive(const Captured& c, const Bytes& aad, Bytes& plaintext_out);
+
+    void reboot(); // resets the nonce counter to 0 (the bug)
+    Captured send(const Bytes &aad, const Bytes &plaintext);
+
+    bool receive(const Captured &c, const Bytes &aad, Bytes &plaintext_out);
+
 private:
-    uint8_t  key_[16];
-    uint64_t counter_ = 0;                   // becomes the IV; reset by reboot()
-    void     make_iv(uint8_t iv[12]);
+    uint8_t key_[16];
+    uint64_t counter_ = 0; // becomes the IV; reset by reboot()
+    void make_iv(uint8_t iv[12]);
 };
 
 // TODO(you): implement in victim.cpp (thin wrapper over gcm_encrypt/decrypt).

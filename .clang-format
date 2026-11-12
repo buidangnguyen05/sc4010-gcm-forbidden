@@ -1,0 +1,54 @@
+# AES-GCM forbidden-attack project — C++17.
+# Matches the existing style: 4-space indent, attached (K&R) braces,
+# left-bound pointers, short ifs/functions allowed on one line.
+---
+Language: Cpp
+Standard: c++17
+BasedOnStyle: LLVM
+
+# --- indentation ---
+IndentWidth: 4
+TabWidth: 4
+UseTab: Never
+ContinuationIndentWidth: 4
+AccessModifierOffset: -4
+NamespaceIndentation: None
+IndentCaseLabels: false
+
+# --- line width ---
+ColumnLimit: 100
+
+# --- braces: attached, K&R ---
+BreakBeforeBraces: Attach
+Cpp11BracedListStyle: true
+
+# --- keep the terse one-liners the code already uses ---
+AllowShortFunctionsOnASingleLine: Inline     # e.g. gf gf_sqr(gf) { todo("gf_sqr"); }
+AllowShortIfStatementsOnASingleLine: WithoutElse  # e.g. if ((b >> i) & 1) z ^= v;
+AllowShortLoopsOnASingleLine: false
+AllowShortBlocksOnASingleLine: Empty
+AllowShortCaseLabelsOnASingleLine: false
+
+# --- pointers/references bind to the type: `const uint8_t* p` ---
+PointerAlignment: Left
+DerivePointerAlignment: false
+
+# --- spacing ---
+SpaceBeforeParens: ControlStatements
+SpacesBeforeTrailingComments: 2
+SpaceAfterCStyleCast: false
+
+# --- alignment & misc ---
+AlignAfterOpenBracket: Align
+AlignTrailingComments: true
+AlignConsecutiveAssignments: false
+AlignConsecutiveDeclarations: false
+BinPackArguments: true
+BinPackParameters: true
+AllowAllParametersOfDeclarationOnNextLine: true
+KeepEmptyLinesAtTheStartOfBlocks: false
+MaxEmptyLinesToKeep: 1
+ReflowComments: true
+FixNamespaceComments: true
+SortIncludes: false   # keep "gf128.h" first by hand, don't reorder project/system headers
+...

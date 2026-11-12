@@ -1,0 +1,69 @@
+# AES-GCM forbidden-attack project.
+# Tuned for low-level crypto code: raw uint8_t[16] buffers, bit twiddling,
+# and fixed-size constants (16, 128, 0xE1, 0xFF) are intentional here, so the
+# checks that would flag every one of them are switched off on purpose.
+---
+Checks: >
+  clang-analyzer-*,
+  bugprone-*,
+  performance-*,
+  portability-*,
+  misc-*,
+  modernize-*,
+  readability-*,
+  cppcoreguidelines-*,
+  -modernize-use-trailing-return-type,
+  -modernize-avoid-c-arrays,
+  -modernize-use-nodiscard,
+  -cppcoreguidelines-avoid-c-arrays,
+  -cppcoreguidelines-avoid-magic-numbers,
+  -cppcoreguidelines-pro-bounds-pointer-arithmetic,
+  -cppcoreguidelines-pro-bounds-array-to-pointer-decay,
+  -cppcoreguidelines-pro-bounds-constant-array-index,
+  -cppcoreguidelines-pro-type-reinterpret-cast,
+  -cppcoreguidelines-init-variables,
+  -readability-magic-numbers,
+  -readability-identifier-length,
+  -misc-no-recursion,
+  -misc-include-cleaner,
+  -bugprone-easily-swappable-parameters,
+  -modernize-use-auto,
+  -readability-braces-around-statements,
+  -readability-isolate-declaration,
+  -portability-avoid-pragma-once
+
+# Only lint our own headers, not OpenSSL / system headers pulled in transitively.
+HeaderFilterRegex: '(gf128|gf128poly|gcm|attack|victim)\.h$'
+
+# Warnings only; do not fail the build. Flip to a specific list when you want CI gates.
+WarningsAsErrors: ''
+
+FormatStyle: file
+
+CheckOptions:
+  # snake_case for functions/variables, matching the existing code.
+  - key: readability-identifier-naming.FunctionCase
+    value: lower_case
+  - key: readability-identifier-naming.VariableCase
+    value: lower_case
+  - key: readability-identifier-naming.ParameterCase
+    value: lower_case
+  # trailing underscore for private members: counter_, key_
+  - key: readability-identifier-naming.PrivateMemberSuffix
+    value: _
+  # type names and structs: Victim, Captured, Msg, Forgery -> CamelCase
+  - key: readability-identifier-naming.ClassCase
+    value: CamelCase
+  - key: readability-identifier-naming.StructCase
+    value: CamelCase
+  # constants like GF_R, GF_ONE stay UPPER_CASE
+  - key: readability-identifier-naming.ConstantCase
+    value: UPPER_CASE
+  - key: readability-identifier-naming.GlobalConstantCase
+    value: UPPER_CASE
+  # don't rewrite the field alias `gf` / `poly`
+  - key: readability-identifier-naming.TypedefCase
+    value: aNy_CasE
+  - key: readability-identifier-naming.TypeAliasCase
+    value: aNy_CasE
+...
