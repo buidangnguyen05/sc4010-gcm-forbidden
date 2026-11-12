@@ -27,5 +27,10 @@ target_link_libraries(tests PRIVATE gcmcore)
 add_executable(forbidden main.cpp)
 target_link_libraries(forbidden PRIVATE gcmcore)
 
+# GATE #3 — polynomial / root-finding unit tests. `./poly_tests [name-filter]`
+add_executable(poly_tests poly_tests.cpp)
+target_link_libraries(poly_tests PRIVATE gcmcore)
+
 enable_testing()
 add_test(NAME gate1 COMMAND tests)
+add_test(NAME gate3 COMMAND poly_tests)
